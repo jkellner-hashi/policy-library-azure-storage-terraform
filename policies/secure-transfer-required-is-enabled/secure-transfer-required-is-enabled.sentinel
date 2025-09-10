@@ -7,11 +7,19 @@ allStorageAccounts = filter tfplan.resource_changes as _, resource_changes {
 			resource_changes.change.actions is ["update"])
 }
 
+#enable_https_traffic_only_is_true = rule {
+#	all allStorageAccounts as _, accounts {
+#		accounts.change.after.enable_https_traffic_only is true
+#	}
+#}
+
 enable_https_traffic_only_is_true = rule {
-	all allStorageAccounts as _, accounts {
-		accounts.change.after.enable_https_traffic_only is true
-	}
+  all allStorageAccounts as _, accounts {
+    accounts.change.after contains "enable_https_traffic_only" and
+    accounts.change.after.enable_https_traffic_only is true
+  }
 }
+
 
 // Ensure that 'Secure transfer required' is set to Enabled.
 main = rule {
